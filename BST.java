@@ -15,6 +15,7 @@ class Node {
 }
 
 public class BST {
+
     Node root;
 
     public BST() {
@@ -167,7 +168,6 @@ public class BST {
         return Math.max(lH, rH) + 1;
     }
 
-
     public boolean balance(Node node) {
         int result = isBalanced(node);
         if (result != -1) {
@@ -176,18 +176,67 @@ public class BST {
         return false;
     }
 
+    //convert the sorted array to BST
+    public Node sortedArrayToBST(int[] arr, int start, int end) {
+
+        /* Base Case */
+        if (start > end) {
+            return null;
+        }
+
+        /* Get the middle element and make it root */
+        int mid = (start + end) / 2;
+        Node node = new Node(arr[mid]);
+
+        /* Recursively construct the left subtree and make it
+         left child of root */
+        node.left = sortedArrayToBST(arr, start, mid - 1);
+
+        /* Recursively construct the right subtree and make it
+         right child of root */
+        node.right = sortedArrayToBST(arr, mid + 1, end);
+
+        return node;
+    }
+
+
+    Node prev;
+    public boolean isBST(Node node) {
+
+        if (node == null) {
+            return true;
+        }
+        if (! isBST(node.left)) {
+            return false;
+        }
+        if (prev != null && prev.key >= node.key) {
+            return false;
+        }
+        prev = node;
+        if (! isBST(node.right)) {
+            return false;
+        }
+        return true;
+    }
+
+
 
 
     public static void main(String[] args) {
 
         BST bst = new BST();
         bst.root = new Node(12);
-        bst.root.left = new Node(13);
+        bst.root.left = new Node(11);
         bst.root.right = new Node(14);
         bst.root.left.left = new Node(3);
-        bst.root.left.left.left = new Node(4);
-        bst.root.right.right = new Node(9);
-        System.out.println(bst.balance(bst.root));
+        bst.root.left.left.left = new Node(2);
+        bst.root.right.right = new Node(1);
+
+        System.out.println(bst.isBST(bst.root));
+
+
+
+//        bst.inOrder(bst.sortedArrayToBST(new int[]{1,2,3,4,5,6,}, 0, 5));
 
 
 
